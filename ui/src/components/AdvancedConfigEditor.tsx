@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import YAML from 'yaml';
-import Editor, { OnMount } from '@monaco-editor/react';
+import Editor, { OnMount } from '@/components/MonacoEditor';
 import type { editor } from 'monaco-editor';
 import { useTheme } from '@/components/ThemeProvider';
 

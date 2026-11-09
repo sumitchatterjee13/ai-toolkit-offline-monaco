@@ -192,6 +192,28 @@ npm run build_and_start
 
 You can now access the UI at `http://localhost:8675` or `http://<your-ip>:8675` if you are running it on a server.
 
+## Running the UI offline / behind a strict firewall
+
+This fork makes the UI fully self-contained once `npm install` has run. In the upstream project two things are fetched
+from the internet, which breaks on machines without web access:
+
+- **Monaco editor** (the "Advanced" YAML config editor and the job config viewer) was downloaded from
+  `cdn.jsdelivr.net` by the browser at runtime. It is now served by the UI itself from `ui/public/monaco/vs`.
+  `scripts/copy-monaco.js` copies it there from the `monaco-editor` npm package automatically before every
+  `npm run build` / `npm run dev` (via the `prebuild` / `predev` hooks). You can also run it by hand with
+  `npm run copy_monaco`.
+- **Inter font** was downloaded from Google Fonts by `next build`. It is now bundled from the
+  `@fontsource-variable/inter` npm package (SIL Open Font License).
+
+Nothing is fetched from the internet by the browser or by `next build` any more. Network access is only needed
+while installing (`npm install` talks to the npm registry, and Prisma downloads its database engine from
+`binaries.prisma.sh`). If those are blocked too, run `npm install` once on a machine that has access (this also
+downloads the Prisma engines into `node_modules`), copy the whole `ui/` folder including `node_modules` over, and
+start with `npm run db_build_start` instead of `build_and_start` so nothing is re-downloaded.
+
+If the UI is served from a sub-path (e.g. `https://host/toolkit/`), set `NEXT_PUBLIC_MONACO_VS_PATH=/toolkit/monaco/vs`
+when building.
+
 ## Securing the UI
 
 If you are hosting the UI on a cloud provider or any network that is not secure, I highly recommend securing it with an auth token. 

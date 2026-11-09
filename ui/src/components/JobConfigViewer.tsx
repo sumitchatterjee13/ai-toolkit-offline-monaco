@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import YAML from 'yaml';
-import Editor from '@monaco-editor/react';
+import Editor from '@/components/MonacoEditor';
 
 import { Job } from '@prisma/client';
 
